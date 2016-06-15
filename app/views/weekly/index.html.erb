@@ -1,0 +1,53 @@
+<style type="text/css">
+* {font-family: Helvetica Neue, Arial, sans-serif; }
+h1, table { text-align: center; }
+table {border-collapse: collapse;  width: 100%; margin: 0 auto 5rem;}
+th, td { padding: 0.5rem; font-size: 1.0rem; }
+tr {background: hsl(50, 50%, 80%); }
+tr, td { transition: .4s ease-in;} 
+tr:first-child {background: hsla(12, 100%, 40%, 0.5); }
+tr:nth-child(even) { background: hsla(50, 50%, 80%, 0.7); }
+td:empty {background: hsla(50, 25%, 60%, 0.7); }
+</style>
+
+<h1>豆果美食-平台研发部周报</h1>
+
+<table border="1">
+  <tr>
+    <th width="10%">用户名</th>
+    <th width="45%">上周任务</th>
+    <th width="45%">本周任务</th>
+  </tr>
+<% @users.each do |user| %>
+  <tr>
+  <td><%= user.name %></td>
+  <td>
+  <% @preissues.each do |issue| %>
+    <% if issue.assigned_to_id == user.id %>
+      <% project = Project.find(issue.project_id) %>
+      <a style="padding:3px 0;display:block;" href="/issues/<%= issue.id %>">[<%= project.name %>]<%= issue.subject %></a>
+    <% end %>
+  <% end %>
+  </td>
+  <td>
+  <% @issues.each do |issue| %>
+    <% if issue.assigned_to_id == user.id %>
+      <a style="padding:3px 0;display:block;" href="/issues/<%= issue.id %>">
+	      <% project = Project.find(issue.project_id) %>
+              [<%= project.name %>]<%= issue.subject %>
+	      <% if issue.status_id == 1 %>
+		[未开始]
+	      <% end %>
+	      <% if issue.status_id == 2 %>
+		[进行中]
+	      <% end %>
+	      <% if issue.status_id == 5 %>
+		[已完成]	
+	      <% end %>
+      </a>
+    <% end %>
+  <% end %>
+  </td>
+  <tr>
+<% end %>
+</table>
